@@ -630,6 +630,7 @@ html, body {
 }
 /* /foot */
 
+/* 响应式布局 */
 @media screen and (max-width: 1204px) {
 	.m-noti .notice, .head, .m-head, .discribe-wrap, .body, .m-foot .foot {
 		width: 960px;
