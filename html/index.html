@@ -227,60 +227,9 @@
 <script src="../js/jquery-3.1.0.min.js"></script>
 
 <script>
-// var Slider = function() {
 
-// 	var banners = document.querySelectorAll(".m-slider img");
-// 	var dots = document.querySelectorAll(".m-slider .dots li");
-// 	var topBanner = 0;
-// 	var nextBanner = 1;
-// 	var stepId = null;
 
-// 	var stepNext = function() {
-// 		banners[nextBanner].style.opacity = 0;
-// 		banners[nextBanner].style.zIndex = parseInt(banners[topBanner].style.zIndex) + 1;
 
-// 		fadeIn(banners[nextBanner]);
-// 		addClass(dots[nextBanner], "curDot");
-// 		removeClass(dots[topBanner], "curDot");
-
-// 		topBanner = nextBanner;
-// 		nextBanner = (nextBanner + 1)%3;
-// 	};
-
-// 	var fadeIn = function(banner) {
-// 		var opid = setInterval(function() {
-// 			var op = parseFloat(banner.style.opacity);
-// 			if( op >= 1) {
-// 				clearInterval(opid);
-// 			}
-// 			banner.style.opacity = op + 0.1;
-// 		}, 50);
-// 	};
-
-// 	var startAnim = function(interval) {
-// 		stepId = setInterval(stepNext, interval);
-// 	};
-
-// 	for (var i = 0; i < dots.length; i++) {
-// 		EventUtil.addEvent(dots[i], "click", (function(i) {
-// 			if (i == topBanner) {
-// 				return;
-// 			};
-// 			clearInterval(stepId);
-// 			stepId = setInterval(stepNext, 5000);
-// 			nextBanner = i;
-// 			stepNext();
-// 		}).bind(null, i));
-// 	};
-
-// 	return {
-// 		startAnim: startAnim,
-// 	}
-
-// }
-
-// var slider = Slider();
-// slider.startAnim(3000);
 </script>
 
 </body>

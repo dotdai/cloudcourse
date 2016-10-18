@@ -1,14 +1,11 @@
 // 提示栏
 // 
 // 
-var mnoti = document.querySelector(".m-noti");
-var hide = document.querySelector(".hide");
-
 if(!CookieUtil.get("notihide")) {
-mnoti.style.display = "block";
-EventUtil.addEvent(hide, "click", function() {
-	mnoti.style.display = "none";
-	CookieUtil.set("notihide", "yes", new Date(2017,11,13));
+	var noti = Noti();
+	noti.show();
+	noti.emitter.on('hide', function() {
+		CookieUtil.set("notihide", "yes", new Date(2017,11,13));
 	});
 }
 
@@ -19,11 +16,6 @@ EventUtil.addEvent(hide, "click", function() {
 var attention = document.querySelector(".attention");
 var attenAfter = document.querySelector(".attenAfter");
 var cancel = document.querySelector(".cancel");
-var mlogin = document.querySelector(".m-login");
-var close = document.querySelector(".m-login .close");
-var submit = document.querySelector(".m-login .submit");
-var username = document.querySelector(".m-login .name");
-var password = document.querySelector(".m-login .password");
 var funsnum = document.querySelector(".funsnum");
 
 // 取消关注
@@ -45,57 +37,8 @@ var atten = function() {
 		funsnum.innerText = ++num;
 
 	} else {
-		mlogin.style.display = "block";
-		EventUtil.addEvent(close, "click", function() {
-			mlogin.style.display = "none";
-		});
-		EventUtil.addEvent(submit, "click", function() {
-			login();
-		});
-	}
-};
-
-// 登录
-var login = function() {
-	var mname = username.value;
-	var mpassword = password.value;
-
-	if(!validateName(mname) || !validatePass(mpassword)) {
-		return;
-	}
-
-	mname = md5(mname);
-	mpassword = md5(mpassword);
-
-	AjaxUtil.get("http://study.163.com/webDev/login.htm", {
-		"userName":mname,
-		"password":mpassword
-	}, function(response) {
-		if(response == 1) {
-			mlogin.style.display = "none";
-			CookieUtil.set("loginSuc", "yes", new Date(2017, 11, 13));
-			atten();
-		} else {
-			alert("用户名或密码错误！");
-		}
-	});
-};
-
-// 验证
-var validateName = function(name) {
-	if(name == "") {
-		alert("请输入用户名！");
-	} else {
-		return true;
-	}
-};
-var validatePass = function(password) {
-	if(password == "") {
-		alert("请输入密码！");
-	} else if (!/\d/.test(password)||!/[a-z]/i.test(password)) {
-		alert("密码必须包含数字字母！");
-	} else {
-		return true;
+		var loginModal = LoginModal();
+		loginModal.show();
 	}
 };
 
@@ -106,11 +49,6 @@ EventUtil.addEvent(cancel, "click", notAtten);
 // 轮播头图
 // 
 // 
-var banners = document.querySelectorAll(".m-slider img");
-var dots = document.querySelectorAll(".m-slider .dots li");
-var topBanner = 0;
-var nextBanner = 1;
-
 var removeClass = function(elem, classStr) {
 	var name = elem.getAttribute("class");
 	var names = name.split(" ");
@@ -127,49 +65,15 @@ var addClass = function(elem, classStr) {
 	elem.className = str.trim();
 }
 
-var stepNext = function() {
-	banners[nextBanner].style.opacity = 0;
-	banners[nextBanner].style.zIndex = parseInt(banners[topBanner].style.zIndex) + 1;
 
-	fadeIn(banners[nextBanner]);
-
-	removeClass(dots[topBanner], "curDot");
-	addClass(dots[nextBanner], "curDot");
-
-	topBanner = nextBanner;
-	nextBanner = (nextBanner + 1)%3;
-};
-
-var fadeIn = function(banner) {
-	var opid = setInterval(function() {
-		var curOpacity = parseFloat(banner.style.opacity);
-		if(curOpacity >= 1) {
-			clearInterval(opid);
-		}
-		banner.style.opacity = curOpacity + 0.1;
-	}, 50);
-};
-
-var stepId = setInterval(stepNext, 5000);
-
-for (var i = 0; i < dots.length; i++) {
-	EventUtil.addEvent(dots[i], "click", (function(i) {
-		clearInterval(stepId);
-		stepId = setInterval(stepNext, 5000);
-		nextBanner = i;
-		stepNext();
-	}).bind(null, i));
-}
-
-for (var i = 0; i < dots.length; i++) {
-	EventUtil.addEvent(banners[i], "mouseover", (function(i) {
-		clearInterval(stepId);
-	}).bind(null, i));
-
-	EventUtil.addEvent(banners[i], "mouseleave", (function(i) {
-		stepId = setInterval(stepNext, 5000);
-	}).bind(null, i));
-}
+var slider = Slider();
+var stepId = setInterval(slider.stepNext.bind(slider), 5000);
+EventUtil.addEvent(slider.mslider, "mouseover", function() {
+	clearInterval(stepId);
+});
+EventUtil.addEvent(slider.mslider, "mouseleave", function() {
+	stepId = setInterval(slider.stepNext.bind(slider), 5000);
+});
 
 // 页面中部
 // 
